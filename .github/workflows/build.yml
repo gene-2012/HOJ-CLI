@@ -32,6 +32,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/hoj-cli
+          name: hoj-cli-linux
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
@@ -40,5 +41,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: hoj-cli.exe
+          name: hoj-cli-windows.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
