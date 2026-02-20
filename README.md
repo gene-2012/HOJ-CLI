@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/github/license/gene-2012/hoj-cli)](https://github.com/gene-2012/hoj-cli/blob/main/LICENSE)
 [![Release](https://img.shields.io/github/v/release/gene-2012/hoj-cli)](https://github.com/gene-2012/hoj-cli/releases)
-[![C++ Standard](https://img.shields.io/badge/C%2B%2B-20-blue.svg)](https://en.cppreference.com/w/cpp/20)
+[![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
 
 ---
 
@@ -20,18 +20,18 @@
 前往 [📦Releases](https://github.com/GeneLuo/hoj-cli/releases) 页面下载对应系统的构建产物，解压并将可执行文件添加至系统路径（PATH）即可。
 
 #### 方式 B：源码编译
-需要 **C++ 17** 或更高版本（强烈建议使用 **C++ 20**）。
+需要 **C++ 17** 环境。
 
 ```bash
 git clone https://github.com/gene-2012/hoj-cli
 cd hoj-cli
 
-# Linux / macOS 编译
-g++ -std=c++20 main.cpp -o hoj-cli
+make
+```
 
-# Windows 编译 (需链接网络库)
-g++ -std=c++20 main.cpp -o hoj-cli -lws2_32
-
+编译产物在 `dist/` 目录下。有时 make 可能无法在 Windows 附加 W64Devkit 的环境下工作。下面是一个替代方案：
+```bash
+g++ -std=c++17 -o hoj-cli main.cpp -lws2_32
 ```
 
 ### 2. 身份验证与配置
