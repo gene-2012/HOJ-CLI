@@ -24,11 +24,18 @@ jobs:
         if: runner.os == 'Windows'
         run: g++ -std=c++17 -o hoj-cli main.cpp -lws2_32
       
-      - name: Upload to Release
+      - name: Upload Linux to Release
+        if: runner.os == 'Linux'
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            dist/hoj-cli
-            hoj-cli.exe
+          files: dist/hoj-cli
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Upload Windows to Release
+        if: runner.os == 'Windows'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: hoj-cli.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
