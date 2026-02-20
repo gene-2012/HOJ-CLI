@@ -1,10 +1,8 @@
 name: Multi-Platform Build
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -26,18 +24,11 @@ jobs:
         if: runner.os == 'Windows'
         run: g++ -std=c++17 -o hoj-cli main.cpp -lws2_32
       
-      - name: Upload Linux artifacts
-        if: runner.os == 'Linux'
-        uses: actions/upload-artifact@v4
+      - name: Upload to Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: hoj-cli-Linux
-          path: dist/hoj-cli
-          retention-days: 30
-      
-      - name: Upload Windows artifacts
-        if: runner.os == 'Windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: hoj-cli-Windows
-          path: hoj-cli.exe
-          retention-days: 30
+          files: |
+            dist/hoj-cli
+            hoj-cli.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
