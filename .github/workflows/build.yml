@@ -1,42 +1,43 @@
-name: Build and Release
+name: Multi-Platform Build
 
 on:
   push:
-    tags:
-      - 'v*' # 当推送 v1.0, v2.1.3 等标签时触发
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
 
 jobs:
-  release:
-    name: Build on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+  build:
     strategy:
       matrix:
-        include:
-          - os: ubuntu-latest
-            platform: linux
-            build_cmd: make
-            binary_name: dist/hoj-cli
-            out_name: hoj-cli-linux
-          - os: windows-latest
-            platform: windows
-            build_cmd: g++ -std=c++17 -O2 main.cpp -o hoj-cli.exe -lws2_32 -lshlwapi
-            binary_name: hoj-cli.exe
-            out_name: hoj-cli-windows.exe
-
+        os: [ubuntu-latest, windows-latest]
+    
+    runs-on: ${{ matrix.os }}
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Build Project
-        shell: bash
-        run: |
-          ${{ matrix.build_cmd }}
-
-      - name: Upload to Release
-        uses: softprops/action-gh-release@v2
+      
+      - name: Build on Linux
+        if: runner.os == 'Linux'
+        run: make
+      
+      - name: Build on Windows
+        if: runner.os == 'Windows'
+        run: g++ -std=c++17 -o hoj-cli main.cpp -lws2_32
+      
+      - name: Upload Linux artifacts
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
         with:
-          files: ${{ matrix.binary_name }}
-          # 自动将文件重命名为更具辨识度的名字（可选）
-          # 注意：softprops 支持通配符，如果需要重命名建议在 build 阶段 mv 一下
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: hoj-cli-Linux
+          path: dist/hoj-cli
+          retention-days: 30
+      
+      - name: Upload Windows artifacts
+        if: runner.os == 'Windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: hoj-cli-Windows
+          path: hoj-cli.exe
+          retention-days: 30

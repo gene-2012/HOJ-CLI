@@ -317,6 +317,11 @@ int main(int argc, char** argv) {
 
     CLI::App app{"HOJ-CLI"};
 
+    if (argc == 1) {
+        std::cout << "HOJ-CLI by LJE, Compiled at " << __DATE__ << " " << __TIME__ << "\n";
+        return 0;
+    }
+
     /* -------- login -------- */
     auto login = app.add_subcommand("login", "Login to HOJ");
 
